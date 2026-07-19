@@ -1,0 +1,40 @@
+name: node_project
+on:
+  push:
+    branches:
+    - main
+    - dev
+  pull_request:
+    branches:
+    - main
+    - release/*
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: get_code
+      uses: actions/checkout@v6
+    - name: install nodejs
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - name: install dependencies
+      run: npm ci
+    - name: run test
+      run: npm run test
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - name: get_code
+      uses: actions/checkout@v6
+    - name: install nodejs
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    - name: install dependencies
+      run: npm ci
+    - name: build node_project
+      run: npm run build
+    - name: deploy
+      run: echo "deploy an application"
